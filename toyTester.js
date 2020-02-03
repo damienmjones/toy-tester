@@ -1,3 +1,6 @@
+/* READABLE VERSION OF TESTING CODE (unminified for editing)
+----------------------------------------------------------*/
+
 var _test = function(tests) { 
   var pv = process.argv,f=pv[1].split('/'),repeat = parseInt(pv.find( a => !isNaN(parseInt(a)) ) || 1)
   f=f[f.length-1].split('.')[0]; 
@@ -50,7 +53,7 @@ var _test = function(tests) {
 
 /* FUNCTION TO TEST (bonus if it's the name of the file)
 ------------------------------------------------------*/
-const balancedParens = (input, structure = [], open = '([{', closed = ')]}') => {
+const toyTester = (input, structure = [], open = '([{', closed = ')]}') => { // example: balancedParens()
   for (char of input) {
     if ( open.includes(char) ) structure.push(char);
     if ( closed.includes(char) && structure.pop() != open.charAt(closed.indexOf(char))) return false;
@@ -68,17 +71,17 @@ var _test=function _test(tests){var pv=process.argv,f=pv[1].split("/"),repeat=pa
 ---------------------------------*/
 _test([ // if no first section, it defaults to the filename
   // { section: `should return true if parens are balanced and false otherwise`},
-  { test: `balancedParens(')(')`, expected: false }, 
-  { test: `balancedParens('()')` }, // SHORTHAND: "expected" defaults to true
+  { test: `toyTester(')(')`, expected: false }, 
+  { test: `toyTester('()')` }, // SHORTHAND: "expected" defaults to true
   { test: `')('`, expected: false }, // SHORTHAND: if fn=filename, you can omit fn()
-  `balancedParens('(())')`, // if it's only the test, the object is unnecessary
+  `toyTester('(())')`, // if it's only the test, the object is unnecessary
   // { section: `should work for all types of brackets`}, 
-  { test: `balancedParens('[](){}')`, expected: true },
+  { test: `toyTester('[](){}')`, expected: true },
   `'[({})]'`, // SHORTHAND: fn and expected default; no object
   { test: `'[(]{)}'`, expected: false }, 
   // { section: `ignore non-bracket characters`}, 
-  { test: `balancedParens(' var hubble = function() { telescopes.awesome();')`, expected:false },
-  { test: `balancedParens(' var wow  = { yo: thisIsAwesome() }')`}
+  { test: `toyTester(' var hubble = function() { telescopes.awesome();')`, expected:false },
+  { test: `toyTester(' var wow  = { yo: thisIsAwesome() }')`}
 ])
 
 _test(
