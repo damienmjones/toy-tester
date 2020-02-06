@@ -1,23 +1,3 @@
-/* FUNCTION TO TEST (bonus if it's the name of the file)
-------------------------------------------------------*/
-const toyTester = (input, structure = [], open = '([{', closed = ')]}') => {
-  for (char of input) {
-    if ( open.includes(char) ) structure.push(char);
-    if ( closed.includes(char) && structure.pop() != open.charAt(closed.indexOf(char))) return false;
-  }
-  return (structure.length === 0);
-};
-
-
-/* RUNNNING TESTS IN THE CONSOLE (parameters can be chained) 
-------------------------------------------------------------
-node toyTester.js 
-node toyTester.js -v  (verbose; includes passed tests & durations)
-node toyTester.js     (run 5x) */
-
-
-/* TESTING FUNCTION (expanded & commented)
-----------------------------------------*/
 function _test(tests) {
 
   // gather user-selected execution parameters from node
@@ -164,19 +144,19 @@ function _test(tests) {
   function _final( r ) {
 
         // if fewer tests PASSED than total tests, entire routine fails  
-        failed = r.tpt < r.tt;
+        var failed = r.tpt < r.tt;
         
         // if multiple tests, print which one we're on
         (rpt > 1) ? 'TEST #' + c : 'TESTS';
 
         // format red (or green) and bold depending on whether section passed or failed
-        //      \x1b[101m = red background; \x1b[102m = green background; 
-        r.h = '\n\x1b[0m\x1b[10' + (failed ? '1' : '2') + 'm\x1b[30m\x1b[4m'
+        //      \x1b[101m = red background; \x1b[102m = green background;  \x1b[4m = underline
+        r.h = '\n\x1b[0m\x1b[10' + (failed ? '1' : '2') + '\x1b[4m'
         
         // if multiple tests, print which one we're on and whether it passed or failed
         + ( ( rpt > 1 ) ? 'TEST ' + c : 'TESTS' ) + ' ' + ( failed ? 'FAILED' : 'PASSED' ) 
 
-        // log total passed sections (r.tps) / total sections (r.s)
+        // end underline; log total passed sections (r.tps) / total sections (r.s)
         + '\x1b[24m:  Sections ' + r.tps + '/' + (r.s - 1) 
 
         // log Section success % (passed_sections / total sections) * 100
@@ -193,44 +173,3 @@ function _test(tests) {
   }
 
 };
-
-/* TESTING FRAMEWORK (minified)
------------------------------*/
-function _test(tests){var pv=process.argv,v=process.argv.includes("-v"),vars=pv[1].split("/"),fn=vars[vars.length-1].split(".")[0];rpt=parseInt(pv.find(function(t){return!isNaN(parseInt(t))})||1);for(var c=1;c<=rpt;c++)tests.reduce(function(r,obj,i,a){"string"==typeof obj&&(obj={test:obj}),Array.isArray(obj)&&(obj={test:obj[0],expected:obj[1]});var t,test=obj.test,exp=void 0===obj.expected||obj.expected,section=obj.section;test&&!new RegExp(/[a-zA-Z]+\([^\)]*\)/g).test(test)&&(test=fn+"("+test+")");var ts=process.hrtime(),actual=eval(test),ms=process.hrtime(ts)[1]/1e6,failed=JSON.stringify(actual)!=JSON.stringify(exp),newSection=function(t){r.sn=t,r.st="",r.sp=0,r.sc=0,r.s++};return i||newSection(section||fn),section||(t="[2m[3"+(failed?"1":"2")+"m   * "+test+" expected [1m"+exp+"[22m[2m; returned [3m"+actual+"[37m"+(v?"  ("+ms+"ms)":"")+"\n",(failed||v)&&(r.st+=t),failed||(r.sp++,r.tpt++),r.sc++,r.tt++),(section&&i||i===a.length-1)&&(failed=r.sp<r.sc,failed||r.tps++,r.t+="\n[0m[1m[3"+(failed?"1":"2")+"m"+r.s+") "+r.sn+" -> "+r.sp+"/"+r.sc+" ("+Math.floor(r.sp/r.sc*100)+"%)\n"+r.st,newSection(section),r.ts++),i===a.length-1&&_final(r),r},{t:"",tt:0,tpt:0,tps:0,s:0,sn:"",sp:0,sc:0,st:""});function _final(t){failed=t.tpt<t.tt,rpt,t.h="\n[0m[10"+(failed?"1":"2")+"m[30m[4m"+(rpt>1?"TEST "+c:"TESTS")+" "+(failed?"FAILED":"PASSED")+"[24m:  Sections "+t.tps+"/"+(t.s-1)+" ("+Math.floor(t.tps/(t.s-1)*100)+"%), Tests "+t.tpt+"/"+t.tt+" ("+Math.floor(t.tpt/t.tt*100)+"%)[0m\n",console.log(t.h+t.t+t.h)}}
-
-/* WRITING TESTS
---------------*/
-tests = [ 
-  
-  // if no first section, it defaults to the filename
-  { section: `should return true if parens are balanced and false otherwise`},
-
-  // traditional formatting
-  { test: `toyTester(')(')`, expected: false }, 
-
-  // SHORTHAND: "expected" defaults to true
-  { test: `toyTester('()')` }, 
-
-  // SHORTHAND: if function is the filename, you can omit function()
-  { test: `')('`, expected: false }, 
-
-  // SHORTHAND: if it's only the test, the object is unnecessary
-  `'(())'`, 
-
-  { section: `should work for all types of brackets`}, 
-  `'[](){}'`,,
-  `'[({})]'`, 
-  { test: `'[(]{)}'`, expected: false }, 
-
-  { section: `ignore non-bracket characters`}, 
-  { test: `toyTester(' var hubble = function() { telescopes.awesome();')`, expected:false },
-  { test: `toyTester(' var wow  = { yo: thisIsAwesome() }')`, expected:true},
-
-];
-
-/* COMMENT OUT THIS LINE before doing a pull request
---------------------------------------------------*/
-_test(tests);
-
-
-
